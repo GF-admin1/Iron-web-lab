@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iron Web Lab — Desarrollo web full stack</title>
+<meta name="description" content="Iron Web Lab. Desarrollo web full stack: sitios, tiendas online y sistemas a medida, diseñados con la precisión de un plano de ingeniería.">
+<link rel="icon" href="logo.jpg" type="image/jpeg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue-deep: #020305;
+  --blue-mid: #070a10;
+  --blue-panel: #0a0e16;
+  --line-faint: rgba(111,224,255,0.14);
+  --line-soft: rgba(111,224,255,0.34);
+  --cyan: #00d2ff;
+  --cyan-dim: #0088cc;
+  --glow: rgba(0, 210, 255, 0.65);
+  --paper: #eaf6ff;
+  --paper-dim: #93a8bf;
+  --paper-faint: #55677d;
+  --amber: #ffb454;
+
+  --display: 'Space Grotesk', sans-serif;
+  --body: 'IBM Plex Sans', sans-serif;
+  --mono: 'IBM Plex Mono', monospace;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+
+body{
+  background: var(--blue-deep);
+  color: var(--paper);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.65;
+  overflow-x: hidden;
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; scroll-behavior:auto !important; }
+}
+
+a{ color:inherit; text-decoration:none; }
+ul, ol{ list-style:none; }
+img{ max-width:100%; display:block; }
+::selection{ background: var(--cyan); color:var(--blue-deep); }
+:focus-visible{ outline: 2px solid var(--cyan); outline-offset: 3px; }
+
+.skip-link{
+  position:absolute; left:-999px; top:0;
+  background: var(--cyan); color:var(--blue-deep);
+  padding: 10px 16px; z-index:1000; font-family:var(--mono); font-size:14px;
+}
+.skip-link:focus{ left: 16px; top: 16px; }
+
+.wrap{ max-width: 1180px; margin:0 auto; padding: 0 32px; }
+
+/* ===== Header ===== */
+.site-header{
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  background: rgba(7,21,35,0.82);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line-faint);
+}
+.bar{ display:flex; align-items:center; justify-content:space-between; padding: 12px 32px; }
+
+.brand{ display:flex; align-items:center; gap:16px; }
+
+.brand img, .schematic-frame img, .footer-brand img { 
+  border-radius: 12px;
+  mix-blend-mode: screen; 
+  filter: drop-shadow(0 0 20px var(--glow));
+}
+.brand img { 
+  height: 90px; 
+  width: 90px; 
+  object-fit: contain; 
+}
+.brand-name{ 
+  font-family: var(--display); 
+  font-weight: 600; 
+  font-size: 22px; 
+  letter-spacing: 0.03em; 
+  color: var(--paper); 
+}
+.brand-name em{ font-style:normal; color:var(--cyan); text-shadow: 0 0 12px var(--glow); animation: neonPulse 3s infinite alternate; }
+
+.main-nav ul{ display:flex; gap:30px; }
+.main-nav a{
+  display:flex; align-items:center; gap:8px;
+  font-family:var(--mono); font-size:13.5px; color: var(--paper-dim);
+  transition: color .2s ease;
+}
+.main-nav a:hover{ color: var(--paper); }
+.main-nav .idx{ color: var(--cyan-dim); font-size:11px; }
+
+.stamp-btn{
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight:500;
+  color: var(--cyan);
+  border: 1px solid var(--cyan-dim);
+  padding: 9px 18px;
+  border-radius: 2px;
+  position: relative;
+  transition: all .2s ease;
+  white-space: nowrap;
+  text-shadow: 0 0 10px var(--glow);
+  box-shadow: 0 0 14px rgba(111,224,255,0.12), inset 0 0 14px rgba(111,224,255,0.05);
+}
+.stamp-btn:hover{
+  background: rgba(111,224,255,0.08);
+  box-shadow: 0 0 26px rgba(111,224,255,0.4), inset 0 0 14px rgba(111,224,255,0.08);
+  color: #fff;
+  border-color: var(--cyan);
+}
+.stamp-btn--lg{ padding: 15px 28px; font-size: 14px; }
+
+.nav-toggle{
+  display:none; flex-direction:column; gap:5px;
+  background:none; border:none; cursor:pointer; padding:6px;
+}
+.nav-toggle span{ width:22px; height:2px; background:var(--paper); display:block; }
+
+/* ===== Blueprint grid backdrop ===== */
+.blueprint-grid{
+  position:absolute; inset:0;
+  background-image:
+    linear-gradient(var(--line-faint) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line-faint) 1px, transparent 1px),
+    linear-gradient(rgba(111,224,255,0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(111,224,255,0.3) 1px, transparent 1px);
+  background-size: 24px 24px, 24px 24px, 120px 120px, 120px 120px;
+  -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 20%, black 0%, transparent 78%);
+  mask-image: radial-gradient(ellipse 75% 65% at 50% 20%, black 0%, transparent 78%);
+  pointer-events:none;
+}
+
+/* ===== Hero ===== */
+.hero{ position:relative; min-height: 100vh; display:flex; align-items:center; padding: 150px 0 90px; }
+.hero-grid-layout{
+  position:relative; display:grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 60px; align-items:center;
+  margin-top: 120px;
+}
+
+.doc-code{
+  font-family: var(--mono); font-size:12.5px; letter-spacing:0.08em;
+  color: var(--cyan-dim); margin-bottom: 20px;
+}
+
+.hero h1{
+  font-family: var(--display); font-weight:600;
+  font-size: clamp(2.2rem, 4vw, 3.3rem);
+  line-height:1.18; letter-spacing:-0.01em;
+  margin-bottom: 24px;
+}
+.measured{ 
+  position:relative; display:inline-block; color: var(--cyan); padding-bottom: 14px; text-shadow: 0 0 18px var(--glow); 
+  animation: neonPulse 3s infinite alternate;
+}
+.dim-line{ position:absolute; left:0; bottom:-2px; width:100%; height:16px; }
+.dim-line line{ stroke: var(--cyan-dim); stroke-width:1.5; filter: drop-shadow(0 0 3px var(--glow)); }
+
+.lede{ color: var(--paper-dim); font-size:16.5px; max-width: 480px; margin-bottom: 34px; }
+
+.hero-actions{ display:flex; align-items:center; gap: 26px; flex-wrap:wrap; margin-bottom: 44px; }
+.link-underline{
+  font-family: var(--mono); font-size:13.5px; color: var(--paper-dim);
+  border-bottom: 1px solid var(--line-soft); padding-bottom:2px;
+  transition: color .2s ease, border-color .2s ease;
+}
+.link-underline:hover{ color: var(--cyan); border-color: var(--cyan-dim); }
+
+/* Schematic (hero visual) */
+.schematic{ display:flex; justify-content:center; }
+.schematic-frame{
+  position:relative;
+  width: 280px; height: 280px;
+  display:flex; align-items:center; justify-content:center;
+  background: radial-gradient(circle at 50% 45%, rgba(111,224,255,0.14), transparent 70%);
+}
+.schematic-frame img{ width: 150px; height:150px; }
+
+.corner{ position:absolute; width:22px; height:22px; }
+.corner::before, .corner::after{ content:""; position:absolute; background: var(--cyan-dim); box-shadow: 0 0 6px var(--glow); }
+.corner::before{ width:100%; height:1.5px; top:0; }
+.corner::after{ width:1.5px; height:100%; left:0; }
+.corner.c1{ top:0; left:0; }
+.corner.c2{ top:0; right:0; transform: scaleX(-1); }
+.corner.c3{ bottom:0; left:0; transform: scaleY(-1); }
+.corner.c4{ bottom:0; right:0; transform: scale(-1,-1); }
+
+.callout{
+  position:absolute;
+  font-family: var(--mono); font-size:10.5px; letter-spacing:0.06em;
+  color: var(--cyan-dim);
+  white-space:nowrap;
+}
+.callout--top{ top:14px; left:50%; transform:translateX(-50%); }
+
+/* ===== Reveal ===== */
+.reveal{ opacity:0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
+.reveal.in{ opacity:1; transform:none; }
+
+/* ===== Section shared: title block ===== */
+section{ padding: 110px 0; }
+#servicios, #proceso, #proyectos{ border-top: 1px solid var(--line-faint); }
+
+.title-block{
+  display:flex; gap:20px; align-items:flex-start;
+  margin-bottom: 56px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--line-faint);
+}
+.title-block-idx{
+  font-family: var(--mono); font-size: 34px; font-weight:500;
+  color: var(--cyan-dim); line-height:1;
+  text-shadow: 0 0 14px var(--glow);
+  animation: neonPulse 3s infinite alternate;
+}
+.title-block h2{ font-family: var(--display); font-size: clamp(1.6rem, 2.6vw, 2.1rem); font-weight:600; margin-bottom:8px; }
+.title-block p{ color: var(--paper-dim); font-size:15.5px; max-width:480px; }
+
+/* ===== Efecto Glassmorphism e Interacción en Tarjetas ===== */
+.services-grid{ display:grid; grid-template-columns: repeat(4, 1fr); gap:18px; }
+.service-card, .work-card, .contact-panel {
+  background: rgba(10, 14, 22, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 210, 255, 0.15);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position:relative;
+}
+.service-card{ padding: 30px 22px; }
+.service-card:hover, .work-card:hover {
+  border-color: var(--cyan);
+  background: rgba(10, 14, 22, 0.9);
+  box-shadow: 0 0 25px rgba(0, 210, 255, 0.2), inset 0 0 15px rgba(0, 210, 255, 0.05);
+  transform: translateY(-4px);
+}
+.service-card .card-icon {
+  width: 28px;
+  height: 28px;
+  color: var(--cyan-dim);
+  margin-bottom: 16px;
+  display: block;
+  filter: drop-shadow(0 0 8px var(--glow));
+}
+.service-card h3{ font-family: var(--display); font-size:17px; font-weight:600; margin-bottom:10px; }
+.service-card p{ color: var(--paper-dim); font-size:14px; }
+.service-card .corner{ width:14px; height:14px; }
+.service-card .corner::before, .service-card .corner::after{ background: var(--line-soft); }
+
+/* ===== Process ===== */
+.process-line{ display:grid; grid-template-columns: repeat(4,1fr); gap:0; }
+.process-line li{
+  padding: 0 24px 0 0;
+  border-left: 1px solid var(--line-faint);
+  padding-left: 24px;
+}
+.process-line li:first-child{ border-left:none; padding-left:0; }
+.step-marker{
+  display:block; font-family: var(--mono); font-size:13px; color: var(--cyan);
+  margin-bottom:18px;
+  text-shadow: 0 0 10px var(--glow);
+}
+.process-line h3{ font-family: var(--display); font-size:16.5px; font-weight:600; margin-bottom:10px; }
+.process-line p{ color: var(--paper-dim); font-size:14px; }
+
+/* ===== Work ===== */
+.work-grid{ display:grid; grid-template-columns: 1.3fr 1fr; gap:18px; }
+.work-card{
+  padding: 34px;
+  min-height: 240px;
+  display:flex; flex-direction:column; justify-content:flex-end;
+}
+.work-card h3{ font-family:var(--display); font-size:21px; font-weight:600; margin-bottom:8px; }
+.work-card p{ color: var(--paper-dim); font-size:14.5px; max-width:90%; }
+
+.badge-tag{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-family:var(--mono);
+  font-size:12px;
+  letter-spacing:0.08em;
+  color:var(--cyan);
+  margin-bottom:16px;
+  text-shadow: 0 0 8px var(--glow);
+}
+.badge-tag svg{
+  width:22px;
+  height:22px;
+  filter: drop-shadow(0 0 6px var(--glow));
+}
+
+.work-card--empty{ 
+  align-items:center; 
+  text-align:center; 
+  justify-content:center; 
+  background: rgba(10, 14, 22, 0.4);
+  border: 1px dashed rgba(0, 210, 255, 0.3);
+}
+.work-card--empty:hover {
+  border: 1px solid var(--cyan);
+  background: rgba(10, 14, 22, 0.8);
+}
+.work-card--empty h3 {
+  font-size: 20px;
+  color: var(--paper);
+  margin-bottom: 8px;
+}
+.work-card--empty p{ color: var(--paper-dim); max-width:100%; }
+.work-card--empty .work-link {
+  align-self: center;
+  margin-top: 18px;
+}
+.empty-icon {
+  color: var(--cyan);
+  margin-bottom: 16px;
+  filter: drop-shadow(0 0 8px var(--glow));
+}
+.empty-icon svg {
+  width: 36px;
+  height: 36px;
+}
+
+.work-card .corner{ width:16px; height:16px; }
+.work-card .corner::before, .work-card .corner::after{ background: var(--line-soft); }
+
+.work-link {
+  margin-top: 24px;
+  display: inline-block;
+  align-self: flex-start;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--cyan);
+  border: 1px solid var(--line-soft);
+  padding: 8px 18px;
+  border-radius: 2px;
+  transition: all .3s ease;
+  text-shadow: 0 0 8px var(--glow);
+}
+.work-link:hover {
+  background: rgba(0, 210, 255, 0.1);
+  border-color: var(--cyan);
+  box-shadow: 0 0 15px rgba(0, 210, 255, 0.2), inset 0 0 8px rgba(0, 210, 255, 0.1);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+/* ===== Contact ===== */
+.contact-panel{
+  padding: 64px;
+  text-align:center;
+}
+.contact-panel .doc-code{ justify-content:center; }
+.contact-panel h2{ font-family: var(--display); font-size: clamp(1.7rem, 3vw, 2.3rem); font-weight:600; margin-bottom:14px; }
+.contact-panel p{ color: var(--paper-dim); max-width:460px; margin: 0 auto 32px; }
+.contact-actions{ display:flex; gap:26px; justify-content:center; align-items:center; flex-wrap:wrap; }
+.contact-panel .corner{ width:24px; height:24px; }
+
+/* ===== Footer y Redes Sociales ===== */
+.site-footer{ border-top:1px solid var(--line-faint); padding: 34px 0; }
+.footer-brand{ display:flex; align-items:center; gap:10px; font-family:var(--mono); font-size:12.5px; color:var(--paper-faint); }
+.footer-brand img { height:24px; width:24px; }
+.footer-links{ display:flex; gap:22px; font-family:var(--mono); font-size:12.5px; color: var(--paper-dim); }
+.footer-links a:hover{ color: var(--cyan); }
+
+.social-links { 
+  display: flex; 
+  gap: 18px; 
+  align-items: center; 
+}
+.social-links a { 
+  color: var(--paper-dim); 
+  transition: all .3s ease; 
+  display: flex; 
+}
+.social-links a:hover { 
+  color: var(--cyan); 
+  filter: drop-shadow(0 0 10px var(--glow)); 
+  transform: translateY(-2px); 
+}
+.social-links svg { 
+  width: 24px; 
+  height: 24px; 
+}
+
+/* ===== Botón Flotante de WhatsApp tipo Buscador / Radar ===== */
+.whatsapp-float {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 62px;
+  height: 62px;
+  background: rgba(10, 14, 22, 0.88);
+  border: 1.5px solid var(--cyan);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cyan);
+  z-index: 999;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 20px rgba(0, 210, 255, 0.45), inset 0 0 12px rgba(0, 210, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.12);
+  background: rgba(0, 210, 255, 0.18);
+  box-shadow: 0 0 32px rgba(0, 210, 255, 0.85), inset 0 0 18px rgba(0, 210, 255, 0.4);
+  color: #fff;
+}
+
+.whatsapp-float svg {
+  width: 32px;
+  height: 32px;
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 0 6px var(--glow));
+}
+
+.whatsapp-float::before,
+.whatsapp-float::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1.5px solid var(--cyan);
+  opacity: 0;
+  animation: radarSonar 2.8s infinite cubic-bezier(0.2, 0.6, 0.35, 1);
+  pointer-events: none;
+}
+
+.whatsapp-float::after {
+  animation-delay: 1.4s;
+}
+
+@keyframes radarSonar {
+  0% { transform: scale(0.85); opacity: 0.9; }
+  50% { opacity: 0.4; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+
+@keyframes neonPulse {
+  0%, 100% { text-shadow: 0 0 10px var(--glow), 0 0 20px var(--cyan); }
+  50% { text-shadow: 0 0 5px var(--glow), 0 0 10px var(--cyan-dim); }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 900px){
+  .hero-grid-layout{ grid-template-columns: 1fr; }
+  .schematic{ order:-1; }
+  .services-grid{ grid-template-columns: repeat(2,1fr); }
+  .process-line{ grid-template-columns: repeat(2,1fr); }
+  .process-line li{ border-left:none; padding-left:0; border-top:1px solid var(--line-faint); padding-top:24px; }
+  .process-line li:first-child, .process-line li:nth-child(2){ border-top:none; padding-top:0; }
+  .work-grid{ grid-template-columns:1fr; }
+  .contact-panel{ padding: 46px 24px; }
+}
+
+@media (max-width: 640px){
+  .main-nav, .stamp-btn{ display:none; }
+  .main-nav.open{ display:block; }
+  .nav-toggle{ display:flex; }
+  .main-nav.open ul{
+    position:absolute; top:100%; left:0; right:0;
+    flex-direction:column; gap:0;
+    background: var(--blue-mid);
+    border-top:1px solid var(--line-faint);
+    border-bottom:1px solid var(--line-faint);
+  }
+  .main-nav.open ul li{ border-bottom:1px solid var(--line-faint); }
+  .main-nav.open ul li a{ padding: 16px 32px; }
+  .services-grid{ grid-template-columns: 1fr; }
+  .process-line{ grid-template-columns: 1fr; }
+  .process-line li{ border:none !important; padding: 20px 0 !important; border-top:1px solid var(--line-faint) !important; }
+  .process-line li:first-child{ border-top:none !important; }
+  .wrap{ padding:0 20px; }
+  section{ padding:80px 0; }
+  .hero{ padding: 130px 0 60px; }
+  .site-footer .bar { flex-direction: column; gap: 20px; text-align: center; }
+  .whatsapp-float { bottom: 20px; right: 20px; width: 54px; height: 54px; }
+  .whatsapp-float svg { width: 28px; height: 28px; }
+}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a href="#top" class="brand">
+      <img src="logo.jpg" alt="Iron Web Lab" width="36" height="36">
+    </a>
+
+    <nav class="main-nav" aria-label="Navegación principal">
+      <ul id="navLinks">
+        <li><a href="#servicios"><span class="idx">01</span>Servicios</a></li>
+        <li><a href="#proceso"><span class="idx">02</span>Proceso</a></li>
+        <li><a href="#proyectos"><span class="idx">03</span>Proyectos</a></li>
+        <li><a href="#contacto"><span class="idx">04</span>Contacto</a></li>
+      </ul>
+    </nav>
+
+    <a href="#contacto" class="stamp-btn">Iniciar proyecto</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="navLinks">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="contenido">
+
+  <section class="hero" id="top" aria-label="Presentación">
+    <div class="blueprint-grid" aria-hidden="true"></div>
+
+    <div class="wrap hero-grid-layout">
+      <div class="hero-copy">
+        <h1>
+          Sitios web diseñados con la precisión de
+          <span class="measured">
+            un plano
+            <svg class="dim-line" viewBox="0 0 220 20" preserveAspectRatio="none" aria-hidden="true">
+              <line x1="4" y1="10" x2="216" y2="10" />
+              <line x1="4" y1="4" x2="4" y2="16" />
+              <line x1="216" y1="4" x2="216" y2="16" />
+            </svg>
+          </span>
+          técnico.
+        </h1>
+        <p class="lede">En Iron Web Lab diseño sitios, tiendas online y sistemas a medida para negocios que no quieren un sitio más — quieren una plataforma robusta, escalable y bien estructurada.</p>
+
+        <div class="hero-actions">
+          <a href="#contacto" class="stamp-btn stamp-btn--lg">Iniciar proyecto</a>
+          <a href="#proyectos" class="link-underline">Ver proyectos ↓</a>
+        </div>
+      </div>
+
+      <figure class="schematic" aria-hidden="true">
+        <div class="schematic-frame">
+          <img src="logo.jpg" alt="" width="220" height="220">
+          <span class="corner c1"></span><span class="corner c2"></span>
+          <span class="corner c3"></span><span class="corner c4"></span>
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <section id="servicios" aria-labelledby="servicios-title">
+    <div class="wrap">
+      <div class="title-block reveal">
+        <span class="title-block-idx">01</span>
+        <div>
+          <h2 id="servicios-title">Servicios</h2>
+        </div>
+      </div>
+
+      <ul class="services-grid">
+        <li class="service-card reveal">
+          <span class="corner c1"></span><span class="corner c3"></span>
+          <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+          <h3>Sitios institucionales</h3>
+          <p>Landing pages y sitios rápidos, con diseño propio y pensados para convertir visitas en clientes.</p>
+        </li>
+        <li class="service-card reveal">
+          <span class="corner c1"></span><span class="corner c3"></span>
+          <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <h3>Tiendas online</h3>
+          <p>E-commerce a medida con catálogo, carrito y pagos integrados, listo para vender desde el día uno.</p>
+        </li>
+        <li class="service-card reveal">
+          <span class="corner c1"></span><span class="corner c3"></span>
+          <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+          <h3>Sistemas a medida</h3>
+          <p>Paneles internos, reservas y catálogos dinámicos que automatizan procesos del negocio.</p>
+        </li>
+        <li class="service-card reveal">
+          <span class="corner c1"></span><span class="corner c3"></span>
+          <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+          <h3>Mantenimiento</h3>
+          <p>Actualizaciones y soporte continuo para que el sitio siga funcionando sin sorpresas.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="proceso" aria-labelledby="proceso-title">
+    <div class="wrap">
+      <div class="title-block reveal">
+        <span class="title-block-idx">02</span>
+        <div>
+          <h2 id="proceso-title">Proceso</h2>
+        </div>
+      </div>
+
+      <ol class="process-line reveal">
+        <li>
+          <span class="step-marker">01</span>
+          <h3>Descubrimiento</h3>
+          <p>Analizo tu modelo de negocio, el objetivo del sitio y quién lo va a visitar.</p>
+        </li>
+        <li>
+          <span class="step-marker">02</span>
+          <h3>Diseño</h3>
+          <p>Defino la identidad visual y la estructura antes de escribir una línea de código.</p>
+        </li>
+        <li>
+          <span class="step-marker">03</span>
+          <h3>Desarrollo</h3>
+          <p>Construyo código limpio, rápido y adaptable en todos los dispositivos.</p>
+        </li>
+        <li>
+          <span class="step-marker">04</span>
+          <h3>Lanzamiento</h3>
+          <p>Publico, optimizo el rendimiento y configuro todo para que empiece a recibir visitas.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="proyectos" aria-labelledby="proyectos-title">
+    <div class="wrap">
+      <div class="title-block reveal">
+        <span class="title-block-idx">03</span>
+        <div>
+          <h2 id="proyectos-title">Proyectos</h2>
+        </div>
+      </div>
+
+      <ul class="work-grid">
+        <li class="work-card reveal">
+          <span class="corner c1"></span><span class="corner c3"></span>
+          <div class="badge-tag">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 6h10V4a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v2z"></path>
+              <rect x="5" y="6" width="14" height="15" rx="2"></rect>
+              <path d="M9 12h6"></path>
+              <path d="M9 16h6"></path>
+            </svg>
+            <span>PROTEIN</span>
+          </div>
+          <h3>Torque Suplementos</h3>
+          <p>Emprendimiento de suplementos, con sección de marcas asociadas y catálogo de productos.</p>
+          <a href="https://torque-suplementos.onrender.com/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZnRzaAUGj15wZG9mAmZkaWQWUNtWTptDkAPSQZvNVA07AjsPtC3uV2V4dG4DYWVtAjExAHNydGMGYXBwX2lkDzEyNDAyNDU3NDI4NzQxNAABp63HcTE67EVN4r73V-5ooHmeK8nNr2IdRbxSvtns8nroNK8XW5RbaI0KZap8_aem_4kMqEd-T5fkr8cBTrU2wNg" target="_blank" rel="noopener noreferrer" class="work-link">Ver proyecto ↗</a>
+        </li>
+        <li class="work-card work-card--empty reveal">
+          <div class="empty-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          </div>
+          <h3>Iniciemos tu proyecto</h3>
+          <p>Construyamos la próxima solución digital para tu negocio.</p>
+          <a href="#contacto" class="work-link">Cotizar ahora ↗</a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="contacto" aria-labelledby="contacto-title">
+    <div class="wrap">
+      <div class="contact-panel reveal">
+        <span class="corner c1"></span><span class="corner c2"></span><span class="corner c3"></span><span class="corner c4"></span>
+        <p class="doc-code">IRON WEB LAB · CONTACTO</p>
+        <h2 id="contacto-title">¿Tenés un proyecto en mente?</h2>
+        <p>Contame qué necesitás y en menos de 24 horas te respondo con una propuesta concreta.</p>
+        <div class="contact-actions">
+          <a href="mailto:ironweblab@gmail.com" class="stamp-btn stamp-btn--lg">Escribir un email</a>
+          <a href="https://wa.me/5493816465609" class="link-underline">Hablar por WhatsApp ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap bar">
+    <div class="footer-brand">
+      <span>© 2026 Iron Web Lab</span>
+    </div>
+    
+    <ul class="footer-links">
+      <li><a href="#servicios">Servicios</a></li>
+      <li><a href="#proyectos">Proyectos</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+
+    <div class="social-links">
+      <a href="https://www.instagram.com/ironweblab?igsi=MXhiZzdlemhwZ2JkZg%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+      </a>
+      <a href="https://www.facebook.com/share/1Cd73jxuW2/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<a href="https://wa.me/5493816465609" target="_blank" rel="noopener noreferrer" class="whatsapp-float" aria-label="Contactar por WhatsApp">
+  <svg viewBox="0 0 32 32" fill="currentColor">
+    <path d="M16 2a13.93 13.93 0 0 0-12 21L2 30l7.2-1.9A13.96 13.96 0 1 0 16 2zm0 25.5a11.5 11.5 0 0 1-5.9-1.6l-.4-.3-4.4 1.2 1.2-4.3-.3-.4A11.53 11.53 0 1 1 16 27.5zm6.3-8.6c-.3-.2-2-.9-2.3-1s-.6-.2-.8.2-.9 1.1-1.1 1.3-.4.3-.7.1a8.9 8.9 0 0 1-2.6-1.6 9.8 9.8 0 0 1-1.8-2.3c-.2-.3 0-.5.2-.7s.3-.4.5-.6a2.2 2.2 0 0 0 .3-.5.7.7 0 0 0 0-.6c-.1-.2-.8-2-1.1-2.7s-.6-.6-.8-.6h-.7a1.4 1.4 0 0 0-1 .5 4.3 4.3 0 0 0-1.3 3.2 7.4 7.4 0 0 0 1.6 3.9 16.9 16.9 0 0 0 6.5 5.7 7.7 7.7 0 0 0 3.7.8 3.2 3.2 0 0 0 2.1-1.5 2.6 2.6 0 0 0 .2-1.5c-.1-.2-.4-.3-.7-.5z"/>
+  </svg>
+</a>
+
+<script>
+const revealEls = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in');
+      io.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+revealEls.forEach((el) => io.observe(el));
+
+const navToggle = document.getElementById('navToggle');
+const navLinks = document.getElementById('navLinks');
+const mainNav = navToggle.closest('.bar').querySelector('.main-nav');
+
+navToggle.addEventListener('click', () => {
+  const isOpen = mainNav.classList.toggle('open');
+  navToggle.setAttribute('aria-expanded', String(isOpen));
+});
+
+navLinks.addEventListener('click', (e) => {
+  if (e.target.tagName === 'A') {
+    mainNav.classList.remove('open');
+    navToggle.setAttribute('aria-expanded', 'false');
+  }
+});
+</script>
+</body>
+</html>
