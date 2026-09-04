@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Iron Web Lab — Desarrollo web full stack</title>
-<meta name="description" content="Iron Web Lab. Desarrollo web full stack: sitios, tiendas online y sistemas a medida, diseñados con la precisión de un plano tecnico.">
+<meta name="description" content="Iron Web Lab. Desarrollo web full stack: sitios, tiendas online y sistemas a medida, diseñados con la precisión de un plano técnico.">
 <link rel="icon" href="logo.jpg" type="image/jpeg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -77,8 +77,8 @@ img{ max-width:100%; display:block; }
   filter: drop-shadow(0 0 20px var(--glow));
 }
 .brand img { 
-  height: 90px; 
-  width: 90px; 
+  height: 42px; 
+  width: 42px; 
   object-fit: contain; 
 }
 .brand-name{ 
@@ -491,6 +491,11 @@ section{ padding: 110px 0; }
   .site-footer .bar { flex-direction: column; gap: 20px; text-align: center; }
   .whatsapp-float { bottom: 20px; right: 20px; width: 54px; height: 54px; }
   .whatsapp-float svg { width: 28px; height: 28px; }
+  
+  /* Ajustes del logo y la barra superior para móviles */
+  .brand img { height: 36px !important; width: 36px !important; }
+  .brand-name { font-size: 18px !important; }
+  .bar { padding: 8px 16px !important; }
 }
 </style>
 </head>
@@ -501,7 +506,8 @@ section{ padding: 110px 0; }
 <header class="site-header">
   <div class="wrap bar">
     <a href="#top" class="brand">
-      <img src="logo.jpg" alt="Iron Web Lab" width="36" height="36">
+      <img src="logo.jpg" alt="Iron Web Lab">
+      <span class="brand-name">IRON<em>WEB</em>LAB</span>
     </a>
 
     <nav class="main-nav" aria-label="Navegación principal">
@@ -539,7 +545,7 @@ section{ padding: 110px 0; }
           </span>
           técnico.
         </h1>
-        <p class="lede">En Iron Web Lab diseño sitios, tiendas online y sistemas a medida para negocios que no quieren un sitio más — quieren una plataforma robusta, escalable y bien estructurada.</p>
+        <p class="lede">Iron Web Lab construye sitios, tiendas online y sistemas a medida para negocios que no quieren un sitio más — quieren uno bien hecho, de los cimientos para arriba.</p>
 
         <div class="hero-actions">
           <a href="#contacto" class="stamp-btn stamp-btn--lg">Iniciar proyecto</a>
@@ -549,9 +555,10 @@ section{ padding: 110px 0; }
 
       <figure class="schematic" aria-hidden="true">
         <div class="schematic-frame">
-          <img src="logo.jpg" alt="" width="220" height="220">
+          <img src="logo.jpg" alt="">
           <span class="corner c1"></span><span class="corner c2"></span>
           <span class="corner c3"></span><span class="corner c4"></span>
+          <span class="callout callout--top">MARCA · IWL</span>
         </div>
       </figure>
     </div>
@@ -563,6 +570,7 @@ section{ padding: 110px 0; }
         <span class="title-block-idx">01</span>
         <div>
           <h2 id="servicios-title">Servicios</h2>
+          <p>Cuatro disciplinas, un mismo estándar: que funcione bien y se vea mejor.</p>
         </div>
       </div>
 
@@ -571,7 +579,7 @@ section{ padding: 110px 0; }
           <span class="corner c1"></span><span class="corner c3"></span>
           <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
           <h3>Sitios institucionales</h3>
-          <p>Landing pages y sitios rápidos, con diseño propio y pensados para convertir visitas en clientes.</p>
+          <p>Landing pages y sitios corporativos rápidos, con diseño propio y pensados para convertir visitas en clientes.</p>
         </li>
         <li class="service-card reveal">
           <span class="corner c1"></span><span class="corner c3"></span>
@@ -601,6 +609,7 @@ section{ padding: 110px 0; }
         <span class="title-block-idx">02</span>
         <div>
           <h2 id="proceso-title">Proceso</h2>
+          <p>Cuatro etapas, en orden, sin atajos.</p>
         </div>
       </div>
 
@@ -608,22 +617,22 @@ section{ padding: 110px 0; }
         <li>
           <span class="step-marker">01</span>
           <h3>Descubrimiento</h3>
-          <p>Analizo tu modelo de negocio, el objetivo del sitio y quién lo va a visitar.</p>
+          <p>Entendemos el negocio, el objetivo del sitio y quién lo va a visitar.</p>
         </li>
         <li>
           <span class="step-marker">02</span>
           <h3>Diseño</h3>
-          <p>Defino la identidad visual y la estructura antes de escribir una línea de código.</p>
+          <p>Definimos identidad visual y estructura antes de escribir una línea de código.</p>
         </li>
         <li>
           <span class="step-marker">03</span>
           <h3>Desarrollo</h3>
-          <p>Construyo código limpio, rápido y adaptable en todos los dispositivos.</p>
+          <p>Construimos con código limpio, rápido y responsive en todos los dispositivos.</p>
         </li>
         <li>
           <span class="step-marker">04</span>
           <h3>Lanzamiento</h3>
-          <p>Publico, optimizo el rendimiento y configuro todo para que empiece a recibir visitas.</p>
+          <p>Publicamos, probamos todo en producción y queda listo para crecer.</p>
         </li>
       </ol>
     </div>
@@ -635,6 +644,7 @@ section{ padding: 110px 0; }
         <span class="title-block-idx">03</span>
         <div>
           <h2 id="proyectos-title">Proyectos</h2>
+          <p>Lo último que salió del laboratorio.</p>
         </div>
       </div>
 
@@ -642,6 +652,7 @@ section{ padding: 110px 0; }
         <li class="work-card reveal">
           <span class="corner c1"></span><span class="corner c3"></span>
           <div class="badge-tag">
+            <!-- Envase de proteína -->
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
               <path d="M7 6h10V4a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v2z"></path>
               <rect x="5" y="6" width="14" height="15" rx="2"></rect>
@@ -650,9 +661,9 @@ section{ padding: 110px 0; }
             </svg>
             <span>PROTEIN</span>
           </div>
-          <h3>Torque Suplementos</h3>
-          <p>Emprendimiento de suplementos, con sección de marcas asociadas y catálogo de productos.</p>
-          <a href="https://torque-suplementos.onrender.com/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZnRzaAUGj15wZG9mAmZkaWQWUNtWTptDkAPSQZvNVA07AjsPtC3uV2V4dG4DYWVtAjExAHNydGMGYXBwX2lkDzEyNDAyNDU3NDI4NzQxNAABp63HcTE67EVN4r73V-5ooHmeK8nNr2IdRbxSvtns8nroNK8XW5RbaI0KZap8_aem_4kMqEd-T5fkr8cBTrU2wNg" target="_blank" rel="noopener noreferrer" class="work-link">Ver proyecto ↗</a>
+          <h3>Toro Suplementos</h3>
+          <p>Sitio para tienda de suplementos, con sección de marcas asociadas y catálogo de productos.</p>
+          <a href="URL_DEL_PROYECTO" target="_blank" rel="noopener noreferrer" class="work-link">Ver proyecto ↗</a>
         </li>
         <li class="work-card work-card--empty reveal">
           <div class="empty-icon">
@@ -686,6 +697,7 @@ section{ padding: 110px 0; }
 <footer class="site-footer">
   <div class="wrap bar">
     <div class="footer-brand">
+      <img src="logo.jpg" alt="" width="24" height="24">
       <span>© 2026 Iron Web Lab</span>
     </div>
     
@@ -696,10 +708,10 @@ section{ padding: 110px 0; }
     </ul>
 
     <div class="social-links">
-      <a href="https://www.instagram.com/ironweblab?igsi=MXhiZzdlemhwZ2JkZg%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+      <a href="https://www.instagram.com/TU_USUARIO" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
       </a>
-      <a href="https://www.facebook.com/share/1Cd73jxuW2/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+      <a href="https://www.facebook.com/TU_USUARIO" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
       </a>
     </div>
